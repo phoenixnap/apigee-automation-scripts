@@ -4,7 +4,7 @@ on: [push]
     
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     container: python:3.7.4-alpine3.10
     steps:
       - name: Check out the repo
@@ -18,7 +18,7 @@ jobs:
   build_and_publish:
     if: startsWith(github.ref, 'refs/tags/')
     name: Push Docker image to GitHub Packages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
