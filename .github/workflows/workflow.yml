@@ -30,4 +30,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: phoenixnap/apigee-automation/apigee-automation
-          tags: latest,${{ github.event.release.tag_name }}
+          tags: latest,${{ steps.get_version.outputs.VERSION }}
