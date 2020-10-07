@@ -24,6 +24,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Get the version
+        id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
