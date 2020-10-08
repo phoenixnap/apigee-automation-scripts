@@ -16,8 +16,8 @@ jobs:
           pip install --requirement requirements.txt
           pylint automation/*.py -d R,C,W0511
   build_and_publish:
-    # if: startsWith(github.ref, 'refs/tags/')
-    # needs: [lint]
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [lint]
     name: Push Docker image to GitHub Container Registry
     runs-on: ubuntu-18.04
     steps:
@@ -33,5 +33,4 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}      
           repository: phoenixnap/apigee-automation/apigee-automation
-          tags: test
-          # tags: latest,${{ steps.get_version.outputs.VERSION }}
+          tags: latest,${{ steps.get_version.outputs.VERSION }}
