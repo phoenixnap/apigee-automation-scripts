@@ -18,7 +18,7 @@ jobs:
   build_and_publish:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [lint]
-    name: Push Docker image to GitHub Packages
+    name: Push Docker image to GitHub Container Registry
     runs-on: ubuntu-18.04
     steps:
       - name: Check out the repo
@@ -26,11 +26,11 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Push to GitHub Packages
+      - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v1
         with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}      
           repository: phoenixnap/apigee-automation/apigee-automation
           tags: latest,${{ steps.get_version.outputs.VERSION }}
