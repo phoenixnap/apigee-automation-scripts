@@ -32,5 +32,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}      
-          repository: phoenixnap/apigee-automation/apigee-automation
+          repository: phoenixnap/apigee-automation
           tags: latest,${{ steps.get_version.outputs.VERSION }}
