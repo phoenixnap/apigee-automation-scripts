@@ -216,7 +216,7 @@ def main():
         try:
             update_api_documentation(api_doc, doc, current_portal.id)
         except RestException:
-            # This is a hack! Put call fails intermittentely.  Raised issue with apigee.
+            # Retry since this call fails intermittently
             print("First put call failed ... retrying")
             time.sleep(5)
             update_api_documentation(api_doc, doc, current_portal.id)
