@@ -3,9 +3,11 @@
 import argparse
 import json
 import requests
+import time
 
 from service import apigee_auth, apigee_portal
 from utils import utils
+from exceptions.rest_exception import RestException
 
 
 # Global session used for all requests.
@@ -28,7 +30,7 @@ def spec_exists(org_name: str, spec_name: str) -> bool:
         'https://apigee.com/dapi/api/organizations/{}/specs/folder/home'.format(org_name))
 
     if response.status_code != 200:
-        raise Exception(utils.print_error(response))
+        raise RestException(utils.print_error(response))
 
     print('Successfully fetched OpenAPI Specs from Apigee.')
 
@@ -49,7 +51,7 @@ def documentation_exists(
         'https://apigee.com/portals/api/sites/{}/apidocs'.format(portal_name))
 
     if response.status_code != 200:
-        raise Exception(utils.print_error(response))
+        raise RestException(utils.print_error(response))
 
     for doc in response.json()['data']:
         # Spec ID returned by the API is actually the spec name.
@@ -65,23 +67,28 @@ def update_api_documentation(
         portal_name: str):
     """Updates an existing Portal API Documentation to be in sync with the latest API spec and
        also includes any changes done in the JSON file."""
-    print("Updating API documentation on portal '{}' for spec '{}'".format(
+    print("Updating API documentation on portal '{}' for spec '{}' with doc_id {}".format(
         portal_name,
-        api_doc.spec_name))
+        api_doc.spec_name,
+        api_doc.doc_id))
 
     response = REQUEST.put(
         'https://apigee.com/portals/api/sites/{}/apidocs/{}/snapshot'.format(
             portal_name, api_doc.doc_id))
 
+    print("snapshot response code: {} and content : {}".format(
+        response.status_code,
+        response.content))
+
     if response.status_code != 200:
-        raise Exception(utils.print_error(response))
+        raise RestException(utils.print_error(response))
 
     response = REQUEST.put(
         'https://apigee.com/portals/api/sites/{}/apidocs/{}'.format(
             portal_name, api_doc.doc_id), json=doc)
 
     if response.status_code != 200:
-        raise Exception(utils.print_error(response))
+        raise RestException(utils.print_error(response))
 
     print(
         "Successfully updated API documentation on portal '{}' for spec '{}'".format(
@@ -104,7 +111,7 @@ def create_api_documentation(doc: dict, portal_name: str):
         json=doc)
 
     if response.status_code != 200:
-        raise Exception(utils.print_error(response))
+        raise RestException(utils.print_error(response))
 
     print(
         "Successfully created API documentation on portal '{}' for spec '{}'".format(
@@ -195,7 +202,7 @@ def main():
     # exist on Apigee.
     spec_id = spec_exists(org_name, spec_name)
     if not spec_id:
-        raise Exception(
+        raise RestException(
             "Spec with name '{}' does not exist in Apigee.".format(spec_name))
 
     # Spec IDs might change all the time, and we use the name as our ID.
@@ -206,7 +213,13 @@ def main():
     api_doc = documentation_exists(spec_name, current_portal.id)
     if api_doc:
         print("API Doc already exists.")
-        update_api_documentation(api_doc, doc, current_portal.id)
+        try:
+            update_api_documentation(api_doc, doc, current_portal.id)
+        except RestException:
+            # Retry since this call fails intermittently
+            print("First put call failed ... retrying")
+            time.sleep(5)
+            update_api_documentation(api_doc, doc, current_portal.id)
     else:
         print("API Doc does not currently exist.")
         create_api_documentation(doc, current_portal.id)
