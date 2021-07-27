@@ -249,8 +249,8 @@ python3 automation/upload_pages.py -f ~/dev-env/portal/pages -m ~/test/ph-dev/po
 
 ## upload_portal
 
-| Script file | Error | Message error | Resolution |
+| Script file | Error | Message error | Possible causes |
 |---|---|---|---|
-| upload_portal | 400 | OrgName not specified | Check the organization name and the portal name
-| upload_pages | error | An unexpected error occurred  | Check the href tags, you need to have valid links
+| upload_portal | 400 | OrgName not specified | Wrong organization name and / or portal name |
+| upload_pages | error | An unexpected error occurred  | Invalid href references |
 
