@@ -244,3 +244,13 @@ python3 automation/upload_theme.py --file ~/dev-env/portal/theme/theme_configura
 python3 automation/upload_assets.py -f ~/dev-env/portal/assets -p test -o testOrg -u automationuser -pwd xxx
 python3 automation/upload_pages.py -f ~/dev-env/portal/pages -m ~/test/ph-dev/portal/pages/menu_items.json -p test -o testOrg -u automationuser -pwd xxx
 ```
+
+# Troubleshooting
+
+## upload_portal
+
+| Script file | Error | Message error | Resolution |
+|---|---|---|---|
+| upload_portal | 400 | OrgName not specified | Check the organization name and the portal name
+| upload_pages | error | An unexpected error occurred  | Check the href tags, you need to have valid links
+
