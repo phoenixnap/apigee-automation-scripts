@@ -1,6 +1,22 @@
-# Apigee Automation
+<h1 align="center">
+  <br>
+  <a href="https://phoenixnap.com/bare-metal-cloud"><img src="https://user-images.githubusercontent.com/78744488/109779287-16da8600-7c06-11eb-81a1-97bf44983d33.png" alt="phoenixnap Bare Metal Cloud" width="300"></a>
+  <br>
+  Apigee Automation
+  <br>
+</h1>
 
-The purpose of this repo is to hold automation code related to Apigee.
+<p align="center">
+The purpose of this repo is to hold automation code related to Apigee. 
+</p>
+
+<p align="center">
+  <a href="https://phoenixnap.com/bare-metal-cloud">Bare Metal Cloud</a> •
+  <a href="https://developers.phoenixnap.com/">Developers Portal</a> •
+  <a href="https://developers.phoenixnap.com/docs/bmc/1/overview">API Documentation</a> •
+  <a href="http://phoenixnap.com/kb">Knowledge Base</a> •
+  <a href="https://developers.phoenixnap.com/support">Support</a>
+</p>
 
 ## upload_spec.py
 
@@ -244,3 +260,19 @@ python3 automation/upload_theme.py --file ~/dev-env/portal/theme/theme_configura
 python3 automation/upload_assets.py -f ~/dev-env/portal/assets -p test -o testOrg -u automationuser -pwd xxx
 python3 automation/upload_pages.py -f ~/dev-env/portal/pages -m ~/test/ph-dev/portal/pages/menu_items.json -p test -o testOrg -u automationuser -pwd xxx
 ```
+### Contact phoenixNAP
+Get in touch with us if you have questions or need help with Bare Metal Cloud. 
+
+<p align="left">
+  <a href="https://twitter.com/phoenixNAP">Twitter</a> •
+  <a href="https://www.facebook.com/phoenixnap">Facebook</a> •
+  <a href="https://www.linkedin.com/company/phoenix-nap">LinkedIn</a> •
+  <a href="https://www.instagram.com/phoenixnap">Instagram</a> •
+  <a href="https://www.youtube.com/user/PhoenixNAPdatacenter">YouTube</a> •
+  <a href="https://developers.phoenixnap.com/support">Email</a> 
+</p>
+
+<p align="center">
+  <br>
+  <a href="https://phoenixnap.com/bare-metal-cloud"><img src="https://user-images.githubusercontent.com/81640346/115243282-0c773b80-a123-11eb-9de7-59e3934a5712.jpg" alt="phoenixnap Bare Metal Cloud"></a>
+</p>
