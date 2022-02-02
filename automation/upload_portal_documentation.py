@@ -177,7 +177,7 @@ def main():
     password = args.password
     refresh_token = args.refresh_token
 
-    data = open(doc_path, 'r').read()
+    data = open(doc_path, 'r', encoding='utf8').read()
     doc = json.loads(data)
 
     # Organization name might change according to the environment. so update the json

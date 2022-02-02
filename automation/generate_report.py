@@ -100,7 +100,7 @@ def main():
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
 
     # Read JSON file containing analytics query setup information.
-    data = open(query_path, 'r').read()
+    data = open(query_path, 'r', encoding='utf8').read()
     query = json.loads(data)
 
     # Set the start and end date for the report in the given JSON.
