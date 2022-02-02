@@ -245,6 +245,8 @@ This script reads a JSON file containing a payload as shown in the [Create an as
 
 **enddate** - The end date of the report. This needs to be specified as an argument in the python script instead of part of the JSON payload.
 
+**groupbytimeunit** - Time unit used to group the result set. Valid values include: second, minute, hour, day, week, or month
+
 **username** - Same as in **upload_spec.py**.
 
 **password** - Same as in **upload_spec.py**.
