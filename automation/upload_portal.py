@@ -74,7 +74,7 @@ def main():
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': 'application/json'})
 
     # Load portal configuration ... add or update it.
-    data = open(config_file, 'r').read()
+    data = open(config_file, 'r', encoding='utf8').read()
     config = json.loads(data)
 
     # Override if portal name was passed as a switch.

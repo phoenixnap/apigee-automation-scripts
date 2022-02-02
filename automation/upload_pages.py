@@ -23,7 +23,7 @@ def get_local_pages(pages_folder: str) -> {}:
                      or entry.name.endswith('.htm')
                      or entry.name.endswith('.md')):
             file_name = os.path.splitext(entry.name)[0]
-            local_pages[file_name] = open(entry.path, 'r').read()
+            local_pages[file_name] = open(entry.path, 'r', encoding='utf8').read()
 
     return local_pages
 
@@ -75,7 +75,7 @@ def refresh_menu_items(session, portal_name, org_name: str, menu_items_config: s
     pages = apigee_pages.get_remote_pages(session, portal_name)
     menu_item_types = apigee_menuitems.get_all_menu_item_types(session, portal_name)
 
-    data = open(menu_items_config, 'r').read()
+    data = open(menu_items_config, 'r', encoding='utf8').read()
     header = json.loads(data)['header']
     footer = json.loads(data)['footer']
 
