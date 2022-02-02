@@ -25,16 +25,10 @@ jobs:
     name: Push Docker image to GitHub Container Registry
     runs-on: ubuntu-18.04
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Push to GitHub Container Registry
-        uses: docker/build-push-action@v1
+      - name: Build and push GitHub Container Registry
+        uses: docker/build-push-action@v2.9.0
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_TOKEN }}      
-          repository: phoenixnap/apigee-automation
           tags: latest,${{ steps.get_version.outputs.VERSION }}
