@@ -15,47 +15,53 @@ REQUEST = requests.Session()
 def parse_args():
     """Defines which arguments are needed for the script to run."""
     parser = argparse.ArgumentParser(
-        description='creates or updates an API product in Apigee')
-    req_grp = parser.add_argument_group(title='required arguments')
-    req_grp.add_argument(
+        description='generate an Apigee analytics report')
+    arg_grp = parser.add_argument_group(title='accepted arguments')
+    arg_grp.add_argument(
         '-f',
         '--file',
         help='path of the analytics query JSON file',
         required=True)
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-o',
         '--org',
         help='name of the organization',
         required=True)
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-e',
         '--env',
         help='existing environment in the organization to base the report on',
         required=True)
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-out',
         '--output',
         help='file location of the query output',
         required=False)
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-sd',
         '--startdate',
         help='ISO 8601 (yyyy-MM-ddTHH:mm:ss) UTC date format indicating report start date',
         required=True)
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-ed',
         '--enddate',
         help='ISO 8601 (yyyy-MM-ddTHH:mm:ss) UTC date format indicating report end date',
         required=True)
-    req_grp.add_argument(
+    arg_grp.add_argument(
+        '-gtu',
+        '--groupbytimeunit',
+        help="Time unit used to group the result set. Valid values include: second, minute, hour, day, week, or month",
+        required=False
+    )
+    arg_grp.add_argument(
         '-u',
         '--username',
         help='apigee user')
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-pwd',
         '--password',
         help='apigee password')
-    req_grp.add_argument(
+    arg_grp.add_argument(
         '-rt',
         '--refresh_token',
         help='apigee refresh token')
@@ -78,6 +84,7 @@ def main():
     output_path = args.output
     start_date = args.startdate
     end_date = args.enddate
+    group_by_time_unit = args.groupbytimeunit
     username = args.username
     password = args.password
     refresh_token = args.refresh_token
@@ -96,9 +103,14 @@ def main():
     data = open(query_path, 'r').read()
     query = json.loads(data)
 
-    # Set the start and aed date for the report in the given JSON.
+    # Set the start and end date for the report in the given JSON.
     # This is so that the dates can be modified flexibly without modifying the JSON.
     query.update({'timeRange': {'start': start_date, 'end': end_date}})
+
+    # Set the groupByTimeUnit if provided in the query
+    if group_by_time_unit is not None:
+        query.update({'groupByTimeUnit': group_by_time_unit})
+
     query = apigee_reports.generate_async_query(REQUEST, org_name, env, query)
 
     print('Please wait while report finishes compiling.')

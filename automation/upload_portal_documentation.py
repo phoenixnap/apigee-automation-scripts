@@ -122,7 +122,7 @@ def create_api_documentation(doc: dict, portal_name: str):
 def parse_args():
     """Defines which arguments are needed for the script to run."""
     parser = argparse.ArgumentParser(
-        description='creates or updates an API product in Apigee')
+        description='links an API Product to an API spec and expose it on an Apigee Portal')
     req_grp = parser.add_argument_group(title='required arguments')
     req_grp.add_argument(
         '-f',
