@@ -36,10 +36,12 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GHCR_TOKEN}}
+          
       - name: Build and push GitHub Container Registry
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           push: true
+          username: ${{github.actor}}
+          password: ${{secrets.GHCR_TOKEN}}
+          repository: phoenixnap/apigee-automation
           tags: latest, v1.0.2
