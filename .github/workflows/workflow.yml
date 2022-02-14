@@ -33,11 +33,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build and push GitHub Container Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v1
         with:
+          registry: ghcr.io
+          repository: phoenixnap/apigee-automation
           username: ${{github.actor}}
           password: ${{secrets.GHCR_TOKEN}}
-          registry: ghcr.io
-          repository: phoenixnap
           push: true
           tags: latest, v1.0.2
