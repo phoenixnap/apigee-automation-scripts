@@ -1,6 +1,21 @@
-# Apigee Automation
+<h1 align="center">
+  <br>
+  <a href="https://phoenixnap.com/bare-metal-cloud"><img src="https://user-images.githubusercontent.com/81640346/127175085-9cf4faed-852d-46e3-a25a-1250e953c79e.png" alt="phoenixnap Bare Metal Cloud" width="300"></a>
+  <br>
+  Apigee Automation 
+  <br>
+</h1>
 
+<p align="center">
 The purpose of this repo is to hold automation code related to Apigee.
+</p>
+<p align="center">
+  <a href="https://phoenixnap.com">phoenixNAP Official Website</a> •
+  <a href="https://developers.phoenixnap.com/">BMC Developers Portal</a> •
+  <a href="http://phoenixnap.com/kb">Knowledge Base</a> •
+  <a href="https://developers.phoenixnap.com/support">Support</a>
+</p>
+
 
 ## upload_spec.py
 
@@ -8,17 +23,17 @@ Currently there is no API provided from Apigee which lets you upload an OpenAPI 
 
 This script requires the following arguments to run successfully:
 
-**name** - The name of the spec that will be uploaded to Apigee. If this is not unique, the spec with the same name in Apigee will be updated.
+- **name** - The name of the spec that will be uploaded to Apigee. If this is not unique, the spec with the same name in Apigee will be updated.
 
-**file** - The path of the spec on your machine.
+- **file** - The path of the spec on your machine.
 
-**org** - The organization name in Apigee. **https://apigee.com/organizations/johnd-eval/proxies** has organization name **johnd-eval**.
+- **org** - The organization name in Apigee. **https://apigee.com/organizations/johnd-eval/proxies** has organization name **johnd-eval**.
 
-**username** - The username of the Apigee user that the script uses to fetch an access token.  This access token is used in any other subsequent rest calls.  The access_token will expire every 12 hours.  Usually a dedicated automation user is used here.
+- **username** - The username of the Apigee user that the script uses to fetch an access token.  This access token is used in any other subsequent rest calls.  The access_token will expire every 12 hours.  Usually a dedicated automation user is used here.
 
-**password** - The password for the above username.
+- **password** - The password for the above username.
 
-**refresh_token** - A refresh token can be used instead of the above username and password.  Note that the refresh tokens have an expiry of 1 month.
+- **refresh_token** - A refresh token can be used instead of the above username and password.  Note that the refresh tokens have an expiry of 1 month.
 
 ## upload_api_product.py
 
@@ -81,9 +96,9 @@ This python script leverages Apigee internal APIs to maintain an apigee portal l
 }
 ```
 
-[Learn more about default variables here](https://docs.apigee.com/api-platform/publish/portal/api-portal-themes#override-variables)
+:book: [Learn more about default variables here](https://docs.apigee.com/api-platform/publish/portal/api-portal-themes#override-variables)
 
-[Learn more about custom css here]( https://docs.apigee.com/api-platform/publish/portal/api-portal-themes#style-elements)
+:book: [Learn more about custom css here]( https://docs.apigee.com/api-platform/publish/portal/api-portal-themes#style-elements)
 
 **portal** - Full name of the portal where to upload the theme. e.g. If a portal is accessed through `https://johnd-eval-test.apigee.io`, the name of the portal is `test`.
 
@@ -230,6 +245,8 @@ This script reads a JSON file containing a payload as shown in the [Create an as
 
 **enddate** - The end date of the report. This needs to be specified as an argument in the python script instead of part of the JSON payload.
 
+**groupbytimeunit** - Time unit used to group the result set. Valid values include: second, minute, hour, day, week, or month
+
 **username** - Same as in **upload_spec.py**.
 
 **password** - Same as in **upload_spec.py**.
@@ -245,6 +262,7 @@ python3 automation/upload_assets.py -f ~/dev-env/portal/assets -p test -o testOr
 python3 automation/upload_pages.py -f ~/dev-env/portal/pages -m ~/test/ph-dev/portal/pages/menu_items.json -p test -o testOrg -u automationuser -pwd xxx
 ```
 
+
 # Troubleshooting
 
 ## upload_portal
@@ -254,3 +272,21 @@ python3 automation/upload_pages.py -f ~/dev-env/portal/pages -m ~/test/ph-dev/po
 | upload_portal | 400 | OrgName not specified | Wrong organization name and / or portal name |
 | upload_pages | error | An unexpected error occurred  | Invalid href references |
 
+
+### Contact phoenixNAP
+
+Get in touch with us if you have questions or need help with Bare Metal Cloud or our other infrastructure solutions.
+
+<p align="left">
+  <a href="https://twitter.com/phoenixNAP">Twitter</a> •
+  <a href="https://www.facebook.com/phoenixnap">Facebook</a> •
+  <a href="https://www.linkedin.com/company/phoenix-nap">LinkedIn</a> •
+  <a href="https://www.instagram.com/phoenixnap">Instagram</a> •
+  <a href="https://www.youtube.com/user/PhoenixNAPdatacenter">YouTube</a> •
+  <a href="https://developers.phoenixnap.com/support">Email</a> 
+</p>
+
+<p align="center">
+  <br>
+  <a href="https://phoenixnap.com/bare-metal-cloud"><img src="https://user-images.githubusercontent.com/78744488/109779474-47222480-7c06-11eb-8ed6-91e28af3a79c.jpg" alt="phoenixnap Bare Metal Cloud"></a>
+</p>

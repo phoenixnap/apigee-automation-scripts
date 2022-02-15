@@ -88,7 +88,7 @@ def update_spec(org_name: str, spec_id: int, spec_path: str):
     """Updates an existing spec file."""
     url = 'https://apigee.com/dapi/api/organizations/{}/specs/doc/{}/content'.format(
         org_name, spec_id)
-    with open(spec_path, 'r') as file:
+    with open(spec_path, 'r', encoding='utf8') as file:
         data = file.read()
 
     response = REQUEST.put(url, data=data.encode('utf-8'))

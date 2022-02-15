@@ -116,7 +116,7 @@ def main():
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
 
     # Read JSON file containing API Product setup information.
-    data = open(product_path, 'r').read()
+    data = open(product_path, 'r', encoding='utf8').read()
     product = json.loads(data)
     product_name: str = product['name']
 

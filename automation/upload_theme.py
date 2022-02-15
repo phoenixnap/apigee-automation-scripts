@@ -14,7 +14,7 @@ REQUEST = requests.Session()
 
 def load_local_theme(theme_config_filename: str) -> apigee_customcss.Theme:
     """Retrieves the current theme settings for the current portal."""
-    data = open(theme_config_filename, 'r').read()
+    data = open(theme_config_filename, 'r', encoding='utf8').read()
     config = json.loads(data)
 
     variable_overrides = ''
@@ -24,10 +24,10 @@ def load_local_theme(theme_config_filename: str) -> apigee_customcss.Theme:
     favicon = ''
 
     if config['overridesFile']:
-        variable_overrides = open(config['overridesFile'], 'r').read()
+        variable_overrides = open(config['overridesFile'], 'r', encoding='utf8').read()
 
     if config['customScssFile']:
-        custom_css = open(config['customScssFile'], 'r').read()
+        custom_css = open(config['customScssFile'], 'r', encoding='utf8').read()
 
     if config['logoFile']:
         with open(config['logoFile'], "rb") as image_file:
