@@ -298,6 +298,22 @@ This script reads a JSON file containing a payload as shown in the [Create an as
 
 **refresh_token** - Same as in **upload_spec.py**.
 
+## get_target_server.py
+
+This python script leverages Apigee internal APIs to retrieve a target server by name.
+
+**target_server_name** - the name of the target server.
+
+**portal** - Same as in **upload_theme.py**.
+
+**org** - Same as in **upload_spec.py**.
+
+**username** - Same as in **upload_spec.py**.
+
+**password** - Same as in **upload_spec.py**.
+
+**refresh_token** - Same as in **upload_spec.py**.
+
 ## Example Scripts
 
 ```bash
