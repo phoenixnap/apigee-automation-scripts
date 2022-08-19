@@ -1,10 +1,9 @@
 #!/usr/local/bin/python
 """Script to get target server from Apigee"""
 
-import sys
-import json
 import argparse
-from typing import List
+import zipfile
+import io
 from requests import Response
 from requests import Session
 
@@ -41,9 +40,9 @@ def parse_args():
         help='name of the target server',
         required=True)
     req_grp.add_argument(
-        '-p',
-        '--portal',
-        help='name of the portal',
+        '-env',
+        '--environment',
+        help='name of the environment',
         required=True)
     req_grp.add_argument(
         '-o',
@@ -55,13 +54,18 @@ def parse_args():
         '--username',
         help='apigee user')
     req_grp.add_argument(
-        '-pwd',
+        '-p',
         '--password',
         help='apigee password')
     req_grp.add_argument(
         '-rt',
         '--refresh_token',
         help='apigee refresh token')
+    req_grp.add_argument(
+        '-out',
+        '--output',
+        help='file location of the query output',
+        required=False)
 
     parsed = parser.parse_args()
 
@@ -81,6 +85,7 @@ def main():
     username = args.username
     password = args.password
     refresh_token = args.refresh_token
+    output_path = args.output
 
     # Retrieve an access token using the refresh token provided. This ensures
     # that we always have a valid access token.
@@ -94,9 +99,13 @@ def main():
 
     target_server = get_target_server(org_name, portal, target_server_name)
 
-    sys.stdout.write(json.dumps(target_server))
-    sys.stdout.flush()
-    sys.exit(100)
+    z = zipfile.ZipFile(io.BytesIO(target_server))
+    z.extractall(output_path)
+
+    location = output_path + '/' + z.filelist[0].filename
+    print('File stored in: {}'.format(location))
+
+    return location
 
 
 if __name__ == '__main__':
