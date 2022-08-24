@@ -13,6 +13,17 @@ from service import apigee_auth
 REQUEST = Session()
 APIGEE_API_URL = 'https://api.enterprise.apigee.com/v1/organizations/{}/environments/{}'
 
+
+class TargetServer:
+    def __init__(self, organization: str, environment: str, target_server: any):
+        self.organization = organization
+        self.environment = environment
+        self.target_server = target_server
+
+    def __str__(self):
+        return f"TargetServer: organization: {self.organization}, environment: {self.environment}, target_server: {self.target_server}"
+
+
 def get_target_server(org_name: str, env_name: str, target_server_name: str):
     """Retrieves the target server by name of the given organization name and environment name"""
 
@@ -25,9 +36,19 @@ def get_target_server(org_name: str, env_name: str, target_server_name: str):
 
     return target_server
 
+
+def exists_env_in_org(org_name: str, env_name: str):
+    """Checks if environment exists in organization"""
+
+    response = REQUEST.get(APIGEE_API_URL.format(org_name, env_name))
+
+    return response.status_code == 200
+
+
 def print_error(response: Response) -> str:
     """Prints the error returned from an API call"""
     return f'Error: {response.status_code} - {response.reason}. \n {response.text}'
+
 
 def parse_args():
     """Defines which arguments are needed for the script to run."""
@@ -41,20 +62,20 @@ def parse_args():
         required=True)
     req_grp.add_argument(
         '-env',
-        '--environment',
-        help='name of the environment',
+        '--environments',
+        help='names of the environments',
         required=True)
     req_grp.add_argument(
-        '-o',
-        '--org',
-        help='name of the organization',
+        '-org',
+        '--organizations',
+        help='names of the organizations',
         required=True)
     req_grp.add_argument(
         '-u',
         '--username',
         help='apigee user')
     req_grp.add_argument(
-        '-p',
+        '-pwd',
         '--password',
         help='apigee password')
     req_grp.add_argument(
@@ -80,8 +101,8 @@ def main():
     args = parse_args()
 
     target_server_name = args.target_server_name
-    portal = args.portal
-    org_name = args.org
+    environments = args.environments.split(',')
+    organizations = args.organizations.split(',')
     username = args.username
     password = args.password
     refresh_token = args.refresh_token
@@ -97,9 +118,20 @@ def main():
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
 
-    target_server = get_target_server(org_name, portal, target_server_name)
+    result = []
 
-    z = zipfile.ZipFile(io.BytesIO(target_server))
+    for org in organizations:
+        for env in environments:
+            if not exists_env_in_org(org, env):
+                continue
+
+            target_server = get_target_server(org, env, target_server_name)
+            result.append(TargetServer(org, env, target_server))
+
+    for r in result:
+        print(r)
+
+    z = zipfile.ZipFile(io.BytesIO(result))
     z.extractall(output_path)
 
     location = output_path + '/' + z.filelist[0].filename
