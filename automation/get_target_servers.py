@@ -20,12 +20,13 @@ def get_target_server(org_name: str, env_name: str, target_server_name: str):
 
     response = REQUEST.get((APIGEE_API_URL + '/targetservers/{}').format(org_name, env_name, target_server_name))
 
-    if response.status_code != 200:
-        raise Exception(print_error(response))
+    if response.status_code == 404:
+        return None
 
-    target_server = response.json()
+    if response.status_code == 200:
+        return response.json()
 
-    return target_server
+    raise Exception(print_error(response))
 
 
 def print_error(response: Response) -> str:
@@ -122,7 +123,8 @@ def main():
 
     for env in environments:
         target_server = get_target_server(organization, env, target_server_name)
-        result.append({ 'environment': env, 'target_server': target_server })
+        if target_server is not None:
+            result.append({'environment': env, 'target_server': target_server})
 
     json_data = json.dumps(result)
     binary_data = json_data.encode()
