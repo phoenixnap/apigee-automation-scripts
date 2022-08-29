@@ -69,7 +69,7 @@ def parse_args():
     req_grp.add_argument(
         '-out',
         '--output',
-        help='file location of the query output',
+        help='file location of the api result output',
         required=False)
     req_grp.add_argument(
         '-f',
