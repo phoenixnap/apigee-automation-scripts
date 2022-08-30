@@ -1,6 +1,7 @@
 name: General workflow
 
 on:
+  push:
   pull_request:
     branches:
       - master
