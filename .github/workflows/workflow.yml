@@ -55,5 +55,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: latest
+          tags: ${GITHUB_REPOSITORY,,}:latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
