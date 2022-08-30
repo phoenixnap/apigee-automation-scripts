@@ -25,7 +25,7 @@ jobs:
           pip install --requirement requirements.txt
           pylint automation/*.py -d R,C,W0511
   build_and_publish:
-    needs: [lint]
+    # needs: [lint]
     # if: startsWith(github.ref, 'refs/tags/')
     if: github.ref == 'refs/heads/master'
     name: Push Docker image to GitHub Container Registry
@@ -34,17 +34,15 @@ jobs:
       contents: read
       packages: write
     steps:
-      #- name: Check out the repo
-      #  uses: actions/checkout@v3
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Log in to registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Log in to registry
+      #  uses: docker/login-action@v2
+      #  with:
+      #    registry: ${{ env.REGISTRY }}
+      #    username: ${{ github.actor }}
+      #    password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
