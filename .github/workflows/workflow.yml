@@ -44,3 +44,4 @@ jobs:
         with:
           push: true
           tags: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
