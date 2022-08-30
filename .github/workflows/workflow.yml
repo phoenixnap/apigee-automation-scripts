@@ -37,4 +37,5 @@ jobs:
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
+          push: true
           tags: v1.0.6
