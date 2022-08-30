@@ -34,8 +34,8 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
+      #- name: Check out the repo
+      #  uses: actions/checkout@v3
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -50,5 +50,5 @@ jobs:
         with:
           push: true
           #tags: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
-          tags: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:v1.0.6
+          tags: ${{ env.REGISTRY }}${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}${{ env.IMAGE_NAME }}:v1.0.6
           github-token: ${{ secrets.GITHUB_TOKEN }}
