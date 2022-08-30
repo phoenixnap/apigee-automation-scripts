@@ -5,11 +5,6 @@ on:
   pull_request:
     branches:
       - master
-      
-permissions:
-  packages: write
-  deployments: write
-  pull-requests: write
   
 jobs:
   lint:
@@ -30,17 +25,18 @@ jobs:
     name: Push Docker image to GitHub Container Registry
     runs-on: ubuntu-18.04
     permissions:
+      contents: read
       packages: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo sergioTest
       - name: Log in to registry
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io/phoenixnap/apigee-automation
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push to GitHub Container Registry
