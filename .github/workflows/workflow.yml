@@ -5,7 +5,11 @@ on:
   pull_request:
     branches:
       - master
-    
+      
+permissions:
+  packages: write
+  deployments: write
+  
 jobs:
   lint:
     runs-on: ubuntu-18.04
