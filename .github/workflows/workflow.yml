@@ -1,7 +1,6 @@
 name: General workflow
 
 on:
-  push:
   pull_request:
     branches:
       - master
@@ -20,8 +19,8 @@ jobs:
           pip install --requirement requirements.txt
           pylint automation/*.py -d R,C,W0511
   build_and_publish:
-    if: startsWith(github.ref, 'refs/tags/')
     needs: [lint]
+    if: github.event.pull_request.merged == true
     name: Push Docker image to GitHub Container Registry
     runs-on: ubuntu-18.04
     steps:
@@ -31,11 +30,13 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Log in to registry
-        # This is where you will update the PAT to GITHUB_TOKEN
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io/phoenixnap/apigee-automation
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
-          registry: ghcr.io 
-          repository: phoenixnap/apigee-automation
+          push: true
           tags: latest,${{ steps.get_version.outputs.VERSION }}
