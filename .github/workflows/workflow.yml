@@ -50,5 +50,5 @@ jobs:
         with:
           push: true
           #tags: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
-          tags: ${{ env.REGISTRY }}${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}${{ env.IMAGE_NAME }}:v1.0.6
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v1.0.6
           github-token: ${{ secrets.GITHUB_TOKEN }}
