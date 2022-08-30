@@ -38,4 +38,4 @@ jobs:
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
-          tags: latest,${{ steps.get_version.outputs.VERSION }}
+          tags: v1.0.6
