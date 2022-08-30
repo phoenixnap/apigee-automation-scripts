@@ -20,7 +20,6 @@ jobs:
           pip install --requirement requirements.txt
           pylint automation/*.py -d R,C,W0511
   build_and_publish:
-    needs: [lint]
     if: github.ref == 'refs/heads/master'
     name: Push Docker image to GitHub Container Registry
     runs-on: ubuntu-18.04
@@ -55,5 +54,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: phoenixnap/apigee-automation-scripts:latest
+          tags: ghcr.io/phoenixnap/apigee-automation:latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
