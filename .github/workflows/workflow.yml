@@ -43,4 +43,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: latest,${{ steps.get_version.outputs.VERSION }}
+          tags: latest
