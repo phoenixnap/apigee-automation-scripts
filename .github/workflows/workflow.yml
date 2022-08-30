@@ -33,7 +33,7 @@ jobs:
         with:
           registry: ghcr.io/phoenixnap/apigee-automation
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: $PAT
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v3
         with:
