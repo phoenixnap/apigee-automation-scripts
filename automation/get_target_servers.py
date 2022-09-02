@@ -5,6 +5,7 @@ import json
 import argparse
 import gzip
 import os
+from pathlib import Path
 from requests import Session
 from service import apigee_auth, apigee_target_servers
 
@@ -77,7 +78,9 @@ def main():
     file = args.file
 
     if output_path is None:
-        output_path=os.getcwd()
+        output_path = os.getcwd()
+    else:
+        Path(output_path).mkdir(parents=True, exist_ok=True)
 
     if file is None:
         file = 'target-servers.json.gz'
