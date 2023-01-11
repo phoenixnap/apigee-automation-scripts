@@ -4,8 +4,10 @@ from utils import utils
 
 import json
 
+
 class Portal:
     """Class containing details of an Apigee Portal Page."""
+
     def __init__(self, portal_id: str,
                  name: str,
                  org_name: str,
@@ -162,3 +164,20 @@ def get_portal(session, org_name: str, portal_name: str) -> Portal:
         return all_portals[portal_name]
     else:
         raise Exception('Portal ' + portal_name + ' does not exist')
+
+
+def update_domain(session, portal: Portal, new_settings: dict):
+    url = str.format('https://apigee.com/portals/api/sites/{}/site/domains', 'phoenixnap-non-prod-development')
+
+    portal.defaultDomain = new_settings['domain']
+    portal.id = new_settings['id']
+    portal.migrationSrcSiteId = new_settings['siteId']
+
+    data = json.dumps(new_settings.__dict__)
+
+    response = session.put(url, data=data)
+
+    if response.status_code != 200:
+        raise Exception(utils.print_error(response))
+
+    response = response.json()['data']
