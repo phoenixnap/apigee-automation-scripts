@@ -132,7 +132,7 @@ def create_keystore(session: Session, org_name: str, env_name: str, keystore_nam
 
 def create_aliases(session: Session, org_name: str, env_name: str, keystore_name: str, alias_name: str, path_name: str) -> Alias:
     """Creates an alias in tls keystores Apigee with the given name"""
-    url = (APIGEE_API_URL + '/keystores/{}/aliases?alias={}&format={}&ignoreExpiryValidation=true').format(org_name, env_name, keystore_name,
+    url = (APIGEE_API_URL + '/keystores/{}/aliases?alias={}&format={}').format(org_name, env_name, keystore_name,
                                                                                alias_name, "pkcs12")
 
     file_name = {"file": open(path_name, 'rb')}
