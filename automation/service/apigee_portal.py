@@ -167,15 +167,14 @@ def get_portal(session, org_name: str, portal_name: str) -> Portal:
 
 
 def update_domain(session, portal: Portal, new_settings: dict):
-    url = str.format('https://apigee.com/portals/api/sites/{}/site/domains', 'phoenixnap-non-prod-development')
+    url = str.format('https://apigee.com/portals/api/sites/{}/site/domains', portal.id)
 
-    portal.defaultDomain = new_settings['domain']
-    portal.id = new_settings['id']
-    portal.migrationSrcSiteId = new_settings['siteId']
+    data = json.dumps(new_settings)
+    print(data)
 
-    data = json.dumps(new_settings.__dict__)
+    header = {"Content-Type": "application/json"}
 
-    response = session.put(url, data=data)
+    response = session.post(url, headers=header, data=data)
 
     if response.status_code != 200:
         raise Exception(utils.print_error(response))
