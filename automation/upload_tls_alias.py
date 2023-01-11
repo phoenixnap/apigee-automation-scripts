@@ -1,6 +1,7 @@
+"""Script which is used to upload a tls keystore/certificate to Apigee."""
+
 import argparse
 import requests
-import sys
 
 from service import apigee_auth, apigee_tls_keystore
 
@@ -14,11 +15,6 @@ def parse_args():
         description='uploads a keystore according to the configured file')
     req_grp = parser.add_argument_group(title='list of arguments')
     req_grp.add_argument(
-        '-p',
-        '--portal',
-        help='name of the portal to update',
-        required=True)
-    req_grp.add_argument(
         '-o',
         '--org',
         help='name of the organization',
@@ -29,9 +25,19 @@ def parse_args():
         help='name of the apigee environment',
         required=True)
     req_grp.add_argument(
-        '-r',
-        '--reference',
-        help='name of the tls reference',
+        '-k',
+        '--keystore',
+        help='name of the keystore',
+        required=True)
+    req_grp.add_argument(
+        '-a',
+        '--alias',
+        help='name of the alias',
+        required=True)
+    req_grp.add_argument(
+        '-f',
+        '--file',
+        help='local file path of the pck12 certificate',
         required=True)
     req_grp.add_argument(
         '-u',
@@ -41,12 +47,6 @@ def parse_args():
         '-pwd',
         '--password',
         help='apigee automation password')
-    req_grp.add_argument(
-        '-d',
-        '--expires_in_days',
-        help='days until certificate expires',
-        required=True,
-        type=int)
     req_grp.add_argument(
         '-rt',
         '--refresh_token',
@@ -64,13 +64,13 @@ def main():
     """Method called from the main entry point of the script to do the required logic."""
     args = parse_args()
 
-    portal_name = args.portal
     org_name = args.org
     env_name = args.env
-    ref_name = args.reference
+    keystore_name = args.keystore
+    alias_name = args.alias
+    cert_file = args.file
     username = args.username
     password = args.password
-    expires_in_days = args.expires_in_days
     refresh_token = args.refresh_token
 
     if refresh_token is not None:
@@ -81,23 +81,25 @@ def main():
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': f'Bearer {access_token}'})
 
-    keystore_name = apigee_tls_keystore.get_keystore_from_reference(REQUEST, org_name, env_name, ref_name)
-    crt = apigee_tls_keystore.get_cert_from_alias(REQUEST, org_name, env_name, keystore_name)
+    # Retrieve all the keystore
+    keystores_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
 
-    status = ""
-    cert = apigee_tls_keystore.get_cert_detail(REQUEST, org_name, env_name, keystore_name, crt)
-    if cert['certName'] == crt:
-        status = apigee_tls_keystore.is_cert_expiring(cert, expires_in_days)
+    # Create keystore if not exist
+    if keystore_name not in keystores_list:
+        print('Keystore does not exist - creating it on Apigee')
+        apigee_tls_keystore.create_keystore(REQUEST, org_name, env_name, keystore_name)
 
-    if status != "":
-        if status:
-            # cert is expiring
-            print('Certificate is expiring!')
-            sys.exit(2)
-        else:
-            sys.exit(0)
+    # Retrieve all the aliases of keystore
+    alias_list = apigee_tls_keystore.get_aliases_list(REQUEST, org_name, env_name, keystore_name)
+
+    # Create a new alias for the keystore on Apigee if there isn't an existing one.
+    if alias_name not in alias_list:
+        print('Alias does not exist - creating it on Apigee.')
+        alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, env_name, keystore_name, alias_name, cert_file)
+        print(f'Alias is successfully created and certificate uploaded! {alias}')
     else:
-        raise Exception('Certificate name not found!')
+        print('Certificate updated!')
+        apigee_tls_keystore.update_cert(REQUEST, org_name, env_name, keystore_name, alias_name, cert_file)
 
 
 if __name__ == '__main__':
