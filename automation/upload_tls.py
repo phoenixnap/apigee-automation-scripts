@@ -76,6 +76,9 @@ def parse_args():
     if parsed.env == 'portal':
         parser.error('portal environment is not supported!')
 
+    if parsed.portal is not None and parsed.portal_domain is None:
+        parser.error('portal_domain needs to be set if portal is defined.')
+
     return parsed
 
 
