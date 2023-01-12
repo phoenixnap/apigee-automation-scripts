@@ -54,7 +54,8 @@ def parse_args():
     parsed = parser.parse_args()
 
     if parsed.refresh_token is None and (parsed.username is None or parsed.password is None):
-        parser.error('the following arguments are required: Use either -u/--username and -pwd/--password or -rt/--refresh_token')
+        parser.error('the following arguments are required: Use either -u/--username and -pwd/--password or '
+                     '-rt/--refresh_token')
 
     return parsed
 

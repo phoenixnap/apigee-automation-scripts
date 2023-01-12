@@ -5,7 +5,7 @@ import datetime
 import sys
 import requests
 
-from service import apigee_auth, apigee_tls_keystore
+from service import apigee_auth, apigee_tls_keystore, apigee_portal
 
 # Global session used for all requests.
 REQUEST = requests.Session()
@@ -20,6 +20,10 @@ def parse_args():
         '-p',
         '--portal',
         help='name of the portal to update')
+    req_grp.add_argument(
+        '-pd',
+        '--portal_domain',
+        help='Portal domain')
     req_grp.add_argument(
         '-o',
         '--org',
@@ -66,7 +70,14 @@ def parse_args():
     parsed = parser.parse_args()
 
     if parsed.refresh_token is None and (parsed.username is None or parsed.password is None):
-        parser.error('the following arguments are required: Use either -u/--username and -pwd/--password or -rt/--refresh_token')
+        parser.error(
+            'the following arguments are required: Use either -u/--username and -pwd/--password or -rt/--refresh_token')
+
+    if parsed.env == 'portal':
+        parser.error('portal environment is not supported!')
+
+    if parsed.portal is not None and parsed.portal_domain is None:
+        parser.error('portal_domain needs to be set if portal is defined.')
 
     return parsed
 
@@ -75,10 +86,13 @@ def main():
     """Method called from the main entry point of the script to do the required logic."""
     args = parse_args()
 
+    portal_name = args.portal
+    domain = args.portal_domain
     org_name = args.org
     env_name = args.env
     ref_name = args.reference
     keystore_name = args.keystore + "-" + datetime.datetime.today().strftime('%Y%m%d')
+    portal_keystore_name = env_name + "-" + datetime.datetime.today().strftime('%Y%m%d')
     alias_name = args.alias
     cert_file = args.file
     username = args.username
@@ -94,10 +108,10 @@ def main():
     REQUEST.headers.update({'Authorization': f'Bearer {access_token}'})
 
     # Retrieve all the keystore
-    keystores_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
+    keystore_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
 
     # Create keystore if not exist
-    if keystore_name not in keystores_list:
+    if keystore_name not in keystore_list:
         print('Keystore does not exist - creating it on Apigee')
         apigee_tls_keystore.create_keystore(REQUEST, org_name, env_name, keystore_name)
     else:
@@ -118,6 +132,28 @@ def main():
 
     ref = apigee_tls_keystore.update_reference(REQUEST, org_name, env_name, keystore_name, ref_name)
     print(f'Reference is updated: {ref}')
+
+    if portal_name is not None:
+        portal = apigee_portal.get_portal(REQUEST, org_name, portal_name)
+
+        portal_keystore_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, 'portal')
+
+        if portal_keystore_name not in portal_keystore_list:
+            print('Keystore does not exist - creating it on Apigee')
+            apigee_tls_keystore.create_keystore(REQUEST, org_name, 'portal', portal_keystore_name)
+        else:
+            print('Keystore already exist!')
+            sys.exit(0)
+
+        portal_alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, 'portal', portal_keystore_name, alias_name,
+                                                          cert_file)
+
+        settings = {"domain": domain, "force": "false", "id": None, "siteId": portal.id, "subdomain": None,
+                    "tlsAlias": portal_alias.name, "tlsKeystore": portal_keystore_name}
+
+        apigee_portal.update_domain(REQUEST, portal, settings)
+    else:
+        sys.exit(0)
 
 
 if __name__ == '__main__':
