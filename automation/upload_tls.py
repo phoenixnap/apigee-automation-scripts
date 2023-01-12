@@ -19,13 +19,11 @@ def parse_args():
     req_grp.add_argument(
         '-p',
         '--portal',
-        help='name of the portal to update',
-        required=True)
+        help='name of the portal to update')
     req_grp.add_argument(
         '-pd',
         '--portal_domain',
-        help='Portal domain',
-        required=True)
+        help='Portal domain')
     req_grp.add_argument(
         '-o',
         '--org',
@@ -105,10 +103,10 @@ def main():
 
     if env_name != 'portal':
         # Retrieve all the keystore
-        keystores_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
+        keystore_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
 
         # Create keystore if not exist
-        if keystore_name not in keystores_list:
+        if keystore_name not in keystore_list:
             print('Keystore does not exist - creating it on Apigee')
             apigee_tls_keystore.create_keystore(REQUEST, org_name, env_name, keystore_name)
         else:
@@ -133,9 +131,9 @@ def main():
     if portal_name is not None:
         portal = apigee_portal.get_portal(REQUEST, org_name, portal_name)
 
-        portal_keystores_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, 'portal')
+        portal_keystore_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, 'portal')
 
-        if portal_keystore_name not in portal_keystores_list:
+        if portal_keystore_name not in portal_keystore_list:
             print('Keystore does not exist - creating it on Apigee')
             apigee_tls_keystore.create_keystore(REQUEST, org_name, 'portal', portal_keystore_name)
         else:
