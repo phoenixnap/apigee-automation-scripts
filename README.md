@@ -273,6 +273,8 @@ This script requires the following arguments to run successfully:
 
 - **refresh_token** - A refresh token can be used instead of the above username and password.  Note that the refresh tokens have an expiry of 1 month.
 
+- **portal** - Portal name can be passed as an argument, but not mandatory, to update the certificate and domain settings for that portal
+
 
 ## generate_report.py
 
