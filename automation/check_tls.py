@@ -64,7 +64,6 @@ def main():
     """Method called from the main entry point of the script to do the required logic."""
     args = parse_args()
 
-    portal_name = args.portal
     org_name = args.org
     env_name = args.env
     ref_name = args.reference
