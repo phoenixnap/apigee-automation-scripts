@@ -73,6 +73,9 @@ def parse_args():
         parser.error(
             'the following arguments are required: Use either -u/--username and -pwd/--password or -rt/--refresh_token')
 
+    if parsed.env == 'portal':
+        parser.error('Portal environment is not supported!')
+
     return parsed
 
 
@@ -101,32 +104,31 @@ def main():
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': f'Bearer {access_token}'})
 
-    if env_name != 'portal':
-        # Retrieve all the keystore
-        keystore_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
+    # Retrieve all the keystore
+    keystore_list = apigee_tls_keystore.get_keystores_list(REQUEST, org_name, env_name)
 
-        # Create keystore if not exist
-        if keystore_name not in keystore_list:
-            print('Keystore does not exist - creating it on Apigee')
-            apigee_tls_keystore.create_keystore(REQUEST, org_name, env_name, keystore_name)
-        else:
-            print('Keystore already exist!')
-            sys.exit(0)
+    # Create keystore if not exist
+    if keystore_name not in keystore_list:
+        print('Keystore does not exist - creating it on Apigee')
+        apigee_tls_keystore.create_keystore(REQUEST, org_name, env_name, keystore_name)
+    else:
+        print('Keystore already exist!')
+        sys.exit(0)
 
-        # Retrieve all the aliases of keystore
-        alias_list = apigee_tls_keystore.get_aliases_list(REQUEST, org_name, env_name, keystore_name)
+    # Retrieve all the aliases of keystore
+    alias_list = apigee_tls_keystore.get_aliases_list(REQUEST, org_name, env_name, keystore_name)
 
-        # Create a new alias for the keystore on Apigee if there isn't an existing one.
-        if alias_name not in alias_list:
-            print('Alias does not exist - creating it on Apigee.')
-            alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, env_name, keystore_name, alias_name, cert_file)
-            print(f'Alias is successfully created and certificate uploaded! {alias}')
-        else:
-            print('Certification can not be updated!')
-            sys.exit(0)
+    # Create a new alias for the keystore on Apigee if there isn't an existing one.
+    if alias_name not in alias_list:
+        print('Alias does not exist - creating it on Apigee.')
+        alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, env_name, keystore_name, alias_name, cert_file)
+        print(f'Alias is successfully created and certificate uploaded! {alias}')
+    else:
+        print('Certification can not be updated!')
+        sys.exit(0)
 
-        ref = apigee_tls_keystore.update_reference(REQUEST, org_name, env_name, keystore_name, ref_name)
-        print(f'Reference is updated: {ref}')
+    ref = apigee_tls_keystore.update_reference(REQUEST, org_name, env_name, keystore_name, ref_name)
+    print(f'Reference is updated: {ref}')
 
     if portal_name is not None:
         portal = apigee_portal.get_portal(REQUEST, org_name, portal_name)
