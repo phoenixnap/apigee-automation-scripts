@@ -74,7 +74,7 @@ def parse_args():
             'the following arguments are required: Use either -u/--username and -pwd/--password or -rt/--refresh_token')
 
     if parsed.env == 'portal':
-        parser.error('Portal environment is not supported!')
+        parser.error('portal environment is not supported!')
 
     return parsed
 
