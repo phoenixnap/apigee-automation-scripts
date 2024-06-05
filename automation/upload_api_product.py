@@ -22,7 +22,8 @@ def product_exists(name: str, org_name: str) -> bool:
         'https://api.enterprise.apigee.com/v1/organizations/{}/apiproducts'.format(org_name))
 
     if response.status_code != 200:
-        raise Exception(print_error(response))
+        print_error(response)
+        raise response.raise_for_status()
 
     for product_name in response.json():
         if product_name == name:
@@ -38,7 +39,8 @@ def create_api_product(org_name: str, product_json: str):
         json=product_json)
 
     if response.status_code != 201:
-        raise Exception(print_error(response))
+        print_error(response)
+        raise response.raise_for_status()
 
     print("Successfully created API Product with name '{}'.".format(
         product_json['name']))
@@ -53,7 +55,8 @@ def update_api_product(org_name: str, product_json: str):
             org_name, product_name), json=product_json)
 
     if response.status_code != 200:
-        raise Exception(print_error(response))
+        print_error(response)
+        raise response.raise_for_status()
 
     print("Successfully updated API Product with name '{}'.".format(product_name))
 
@@ -123,7 +126,7 @@ def main():
     # Name is mandatory in the JSON file, otherwise we would not know
     # whether we want to create or update.
     if 'name' not in product:
-        raise Exception(
+        raise IOError(
             print_error('API Product name not specified in JSON file.'))
 
     exists: bool = product_exists(product_name, org_name)
