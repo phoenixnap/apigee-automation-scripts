@@ -80,6 +80,8 @@ As there is no API to create or update Portal Documentation on Apigee, this scri
 
 **refresh_token** - Same as in **upload_spec.py**.
 
+**page_size** - The amount of elements to return for API calls that have paging. Default is 100.
+
 ## upload_theme.py
 
 This python script leverages Apigee internal APIs to maintain an apigee portal look and feel, by modifiying logos, stylesheets etc.  This script uses a custom configuration file described below, to reference different theme resoures. 

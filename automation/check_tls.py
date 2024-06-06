@@ -96,7 +96,8 @@ def main():
         else:
             sys.exit(0)
     else:
-        raise Exception('Certificate name not found!')
+        print('Certificate name not found!')
+        sys.exit(1)
 
 
 if __name__ == '__main__':
