@@ -40,7 +40,8 @@ def get_specs_folder(org_name: str) -> Folder:
         'https://apigee.com/dapi/api/organizations/{}/specs/folder/home'.format(org_name))
 
     if response.status_code != 200:
-        raise Exception(print_error(response))
+        print_error(response)
+        raise response.raise_for_status()
 
     print('Successfully fetched OpenAPI Specs folder from Apigee.')
 
@@ -74,7 +75,8 @@ def create_empty_spec(org_name: str, folder_id: int, spec_name: str) -> Spec:
     response = REQUEST.post(url, json=data)
 
     if response.status_code != 200:
-        raise Exception(print_error(response))
+        print_error(response)
+        raise response.raise_for_status()
 
     json = response.json()
     print(
@@ -93,7 +95,8 @@ def update_spec(org_name: str, spec_id: int, spec_path: str):
 
     response = REQUEST.put(url, data=data.encode('utf-8'))
     if response.status_code != 200:
-        raise Exception(print_error(response))
+        print_error(response)
+        raise response.raise_for_status()
 
     print('Successfully uploaded OpenAPI spec to Apigee!')
 
