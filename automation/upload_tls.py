@@ -152,8 +152,8 @@ def main():
             print('Keystore already exist!')
             sys.exit(0)
 
-        portal_alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, 'portal', portal_keystore_name, alias_name,
-                                                          cert_file)
+        portal_alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, 'portal', portal_keystore_name,
+                                                          alias_name, cert_file, key_file)
 
         settings = {"domain": domain, "force": "false", "id": None, "siteId": portal.id, "subdomain": None,
                     "tlsAlias": portal_alias.name, "tlsKeystore": portal_keystore_name}
