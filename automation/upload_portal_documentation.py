@@ -43,12 +43,13 @@ def spec_exists(org_name: str, spec_name: str) -> bool:
 
 def documentation_exists(
         spec_name: str,
-        portal_name: str, pagesize) -> ApiDoc:
+        portal_name: str,
+        page_size: int) -> ApiDoc:
     """Retrieves a list of API Products exposed on a portal and checks if
        there is an existing one using the given spec name."""
 
     response = REQUEST.get(
-        'https://apigee.com/portals/api/sites/{}/apidocs?pageSize={}'.format(portal_name, pagesize))
+        'https://apigee.com/portals/api/sites/{}/apidocs?pageSize={}'.format(portal_name, page_size))
 
     if response.status_code != 200:
         raise RestException(utils.print_error(response))
@@ -156,6 +157,10 @@ def parse_args():
         '-rt',
         '--refresh_token',
         help='apigee refresh token')
+    req_grp.add_argument(
+        '-pgs',
+        '--page_size',
+        help='page size for API calls that use paging - default is 100')
 
     parsed = parser.parse_args()
 
@@ -176,6 +181,9 @@ def main():
     username = args.username
     password = args.password
     refresh_token = args.refresh_token
+
+    # Some API calls make use of paging, if the page size is not defined, we default it to 100.
+    page_size = 100 if args.page_size is None else args.page_size
 
     data = open(doc_path, 'r', encoding='utf8').read()
     doc = json.loads(data)
@@ -210,7 +218,7 @@ def main():
     # the spec ID dynamically.
     doc.update({'specContent': spec_id})
 
-    api_doc = documentation_exists(spec_name, current_portal.id)
+    api_doc = documentation_exists(spec_name, current_portal.id, page_size)
     if api_doc:
         print("API Doc already exists.")
         try:
