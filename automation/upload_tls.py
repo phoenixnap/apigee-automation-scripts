@@ -50,9 +50,14 @@ def parse_args():
         help='name of the alias',
         required=True)
     req_grp.add_argument(
-        '-f',
-        '--file',
-        help='local file path of the pck12 certificate',
+        '-cf',
+        '--cert_file',
+        help='local file path of the pem certificate file',
+        required=True)
+    req_grp.add_argument(
+        '-kf',
+        '--key_file',
+        help='local file path of the pem private key file',
         required=True)
     req_grp.add_argument(
         '-u',
@@ -94,7 +99,8 @@ def main():
     keystore_name = args.keystore + "-" + datetime.datetime.today().strftime('%Y%m%d')
     portal_keystore_name = env_name + "-" + datetime.datetime.today().strftime('%Y%m%d')
     alias_name = args.alias
-    cert_file = args.file
+    cert_file = args.cert_file
+    key_file = args.key_file
     username = args.username
     password = args.password
     refresh_token = args.refresh_token
@@ -124,7 +130,8 @@ def main():
     # Create a new alias for the keystore on Apigee if there isn't an existing one.
     if alias_name not in alias_list:
         print('Alias does not exist - creating it on Apigee.')
-        alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, env_name, keystore_name, alias_name, cert_file)
+        alias = apigee_tls_keystore.create_aliases(REQUEST, org_name, env_name, keystore_name, alias_name,
+                                                   cert_file, key_file)
         print(f'Alias is successfully created and certificate uploaded! {alias}')
     else:
         print('Certification can not be updated!')
