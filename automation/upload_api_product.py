@@ -117,6 +117,7 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    REQUEST.cookies.update({'access_token': access_token})
 
     # Read JSON file containing API Product setup information.
     data = open(product_path, 'r', encoding='utf8').read()

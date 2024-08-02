@@ -98,6 +98,7 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    REQUEST.cookies.update({'access_token': access_token})
 
     # Read JSON file containing analytics query setup information.
     data = open(query_path, 'r', encoding='utf8').read()
