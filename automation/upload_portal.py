@@ -72,8 +72,6 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': 'application/json'})
-
-    # Auth cookies Fix: copied from upload_portal_documentation.py:206
     REQUEST.cookies.update({'access_token': access_token})
 
     # Load portal configuration ... add or update it.

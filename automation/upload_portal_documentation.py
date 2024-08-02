@@ -202,8 +202,6 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
-
-    # This seems to be expected as of 26/7/2024
     REQUEST.cookies.update({'access_token': access_token})
 
     #Check portal and add it if not present
