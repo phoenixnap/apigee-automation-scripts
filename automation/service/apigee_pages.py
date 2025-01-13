@@ -52,7 +52,8 @@ def add_update_remote_page(session, portal_id: str, org_name: str, page_id: int,
                 'name': re.sub('([-]+)', r' ', friendly_id).lower().title(),
                 'friendlyId': friendly_id,
                 'description': '',
-                'orgname': org_name}
+                'orgname': org_name,
+                'anonAllowed': True}
         response = session.post(url, json=data)
 
         if response.status_code != 200:
