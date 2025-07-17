@@ -332,6 +332,17 @@ python3 automation/upload_assets.py -f ~/dev-env/portal/assets -p test -o testOr
 python3 automation/upload_pages.py -f ~/dev-env/portal/pages -m ~/test/ph-dev/portal/pages/menu_items.json -p test -o testOrg -u automationuser -pwd xxx
 ```
 
+
+# Troubleshooting
+
+## upload_portal
+
+| Script file | Error | Message error | Possible causes |
+|---|---|---|---|
+| upload_portal | 400 | OrgName not specified | Wrong organization name and / or portal name |
+| upload_pages | error | An unexpected error occurred  | Invalid href references |
+
+
 ### Contact phoenixNAP
 
 Get in touch with us if you have questions or need help with Bare Metal Cloud or our other infrastructure solutions.
