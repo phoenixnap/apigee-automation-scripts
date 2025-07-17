@@ -72,6 +72,7 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': 'application/json'})
+    REQUEST.cookies.update({'access_token': access_token})
 
     # Load portal configuration ... add or update it.
     data = open(config_file, 'r', encoding='utf8').read()

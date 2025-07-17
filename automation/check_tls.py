@@ -78,7 +78,8 @@ def main():
         access_token = apigee_auth.get_access_token(username, password)
 
     # Add Auth Header by default to all requests.
-    REQUEST.headers.update({'Authorization': f'Bearer {access_token}'})
+    REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    REQUEST.cookies.update({'access_token': access_token})
 
     keystore_name = apigee_tls_keystore.get_keystore_from_reference(REQUEST, org_name, env_name, ref_name)
     crt = apigee_tls_keystore.get_cert_from_alias(REQUEST, org_name, env_name, keystore_name)

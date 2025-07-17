@@ -202,6 +202,7 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    REQUEST.cookies.update({'access_token': access_token})
 
     #Check portal and add it if not present
     current_portal = apigee_portal.get_portal(REQUEST, org_name, portal)
