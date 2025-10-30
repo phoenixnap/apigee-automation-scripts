@@ -2,7 +2,6 @@
 """Script which is used to upload an OpenAPI spec to Apigee."""
 
 import argparse
-import re
 
 import requests
 
