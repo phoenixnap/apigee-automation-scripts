@@ -71,7 +71,7 @@ def main():
         access_token = apigee_auth.get_access_token(username, password)
 
     # Add Auth Header by default to all requests.
-    apigee_auth.set_headers(REQUEST, access_token, org_name)
+    apigee_auth.set_headers(REQUEST, access_token, org_name, 'application/json')
 
     # Load portal configuration ... add or update it.
     data = open(config_file, 'r', encoding='utf8').read()

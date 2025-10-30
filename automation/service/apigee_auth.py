@@ -3,9 +3,12 @@
 import re
 import requests
 
-def set_headers(session, access_token, org_name):
+def set_headers(session, access_token, org_name, content_type=None):
     """Add Auth Header by default to all requests."""
-    session.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': 'application/json'})
+    if content_type:
+        session.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': content_type})
+    else:
+        session.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
     session.cookies.update({'access_token': access_token})
     session.headers.update({'X-Requested-With': 'XMLHttpRequest'})
     session.headers.update({'X-Apigee-Csrf': get_csrf_token(session)})
