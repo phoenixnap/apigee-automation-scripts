@@ -1,6 +1,25 @@
 #!/usr/local/bin/python
 """Module providing anything related to authenticating with Apigee."""
+import re
 import requests
+
+def set_headers(session, access_token, org_name):
+    """Add Auth Header by default to all requests."""
+    session.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': 'application/json'})
+    session.cookies.update({'access_token': access_token})
+    session.headers.update({'X-Requested-With': 'XMLHttpRequest'})
+    session.headers.update({'X-Apigee-Csrf': get_csrf_token(session)})
+    session.headers.update({'X-Apigee-org': org_name})
+    session.cookies.update({'access_token': access_token})
+
+def get_csrf_token(session) -> str:
+    """Retrieve csrf token from get response"""
+    response = session.get('https://apigee.com/edge')
+    match = re.search(r'<csrf\s+data="([^"]+)"', response.text)
+    if not match:
+        print("CSRF token not found")
+    return match.group(1)
+
 
 def get_access_token(username: str, password: str) -> str:
     """Retrieves an access token from Apigee by using the username and password."""
