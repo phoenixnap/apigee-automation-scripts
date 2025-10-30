@@ -162,6 +162,8 @@ def main():
 
     # Add Auth Header by default to all requests.
     REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    REQUEST.headers.update({'X-Requested-With': 'XMLHttpRequest'})
+    REQUEST.headers.update({'X-Apigee-Csrf': 'xxxxx'})
     REQUEST.cookies.update({'access_token': access_token})
 
     # Retrieve all the API specs
