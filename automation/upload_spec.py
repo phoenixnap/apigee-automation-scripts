@@ -2,6 +2,7 @@
 """Script which is used to upload an OpenAPI spec to Apigee."""
 
 import argparse
+import re
 
 import requests
 
@@ -160,9 +161,22 @@ def main():
     else:
         access_token = apigee_auth.get_access_token(username, password)
 
+
     # Add Auth Header by default to all requests.
-    REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    #REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
+    REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token), 'Content-Type': 'application/json'})
+    REQUEST.cookies.update({'access_token': access_token})
     REQUEST.headers.update({'X-Requested-With': 'XMLHttpRequest'})
+    response = REQUEST.get('https://apigee.com/edge')
+
+    match = re.search(r'<csrf\s+data="([^"]+)"', response.text)
+    if match:
+        csrf_value = match.group(1)
+        print(csrf_value)
+    else:
+        print("CSRF token not found")
+
+
     REQUEST.headers.update({'X-Apigee-Csrf': 'xxxxx'})
     REQUEST.cookies.update({'access_token': access_token})
 
