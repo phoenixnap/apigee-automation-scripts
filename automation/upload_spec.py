@@ -160,9 +160,7 @@ def main():
     else:
         access_token = apigee_auth.get_access_token(username, password)
 
-    # Add Auth Header by default to all requests.
-    REQUEST.headers.update({'Authorization': 'Bearer {}'.format(access_token)})
-    REQUEST.cookies.update({'access_token': access_token})
+    apigee_auth.set_headers(REQUEST, access_token, org_name)
 
     # Retrieve all the API specs
     folder = get_specs_folder(org_name)
